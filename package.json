@@ -1,0 +1,10 @@
+{
+  "name": "london-hampers-carrier",
+  "version": "1.0.0",
+  "description": "Shopify carrier service for London Hampers postcode-based shipping",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {}
+}
