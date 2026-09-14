@@ -91,12 +91,20 @@ const SERVICE_CODES = {
   'Sunday Delivery':          'sunday',
 };
 
+const DISPLAY_NAMES = {
+  'Next Day Delivery':     'Next Day UK Delivery',
+  'Same Day Delivery':     'Same Day London Delivery',
+  'Dated Delivery':        'Dated UK Delivery',
+  'Saturday Delivery':     'Saturday UK Delivery',
+  'Sunday Delivery':       'Sunday UK Delivery',
+};
+
 function buildRates(allRates, postcode) {
   const results = [];
   for (const r of allRates) {
     if (inRange(postcode, r.zip_from, r.zip_to)) {
       results.push({
-        service_name: r.delivery_type,
+        service_name: DISPLAY_NAMES[r.delivery_type] || r.delivery_type,
         service_code: SERVICE_CODES[r.delivery_type] || 'custom',
         total_price:  String(Math.round(parseFloat(r.rate) * 100)), // pence
         currency:     'GBP',
