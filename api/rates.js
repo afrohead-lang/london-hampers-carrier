@@ -100,7 +100,6 @@ function buildRates(allRates, postcode) {
         service_code: SERVICE_CODES[r.delivery_type] || 'custom',
         total_price:  String(Math.round(parseFloat(r.rate) * 100)), // pence
         currency:     'GBP',
-        description:  r.delivery_type,
       });
     }
   }
