@@ -91,16 +91,6 @@ const SERVICE_CODES = {
   'Sunday Delivery':          'sunday',
 };
 
-function getSelectedDate(items) {
-  for (const item of items || []) {
-    const props = item.properties || {};
-    const date  = props['_Delivery Date'] || props['Delivery Date'] || '';
-    if (date) return date; // e.g. "2026-09-17"
-  }
-  return null;
-}
-
-
 function buildRates(allRates, postcode, items) {
   const target   = getSelectedService(items);
   const selDate  = getSelectedDate(items); // exact date customer picked
