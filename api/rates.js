@@ -91,17 +91,39 @@ const SERVICE_CODES = {
   'Sunday Delivery':          'sunday',
 };
 
-function buildRates(allRates, postcode) {
-  const results = [];
+function getSelectedDate(items) {
+  for (const item of items || []) {
+    const props = item.properties || {};
+    const date  = props['_Delivery Date'] || props['Delivery Date'] || '';
+    if (date) return date; // e.g. "2026-09-17"
+  }
+  return null;
+}
+
+
+function buildRates(allRates, postcode, items) {
+  const target   = getSelectedService(items);
+  const selDate  = getSelectedDate(items); // exact date customer picked
+  const results  = [];
+
   for (const r of allRates) {
-    if (inRange(postcode, r.zip_from, r.zip_to)) {
-      results.push({
-        service_name: r.delivery_type,
-        service_code: SERVICE_CODES[r.delivery_type] || 'custom',
-        total_price:  String(Math.round(parseFloat(r.rate) * 100)), // pence
-        currency:     'GBP',
-      });
+    if (!inRange(postcode, r.zip_from, r.zip_to)) continue;
+    if (target && r.delivery_type !== target) continue;
+
+    const rate = {
+      service_name: r.delivery_type,
+      service_code: SERVICE_CODES[r.delivery_type] || 'custom',
+      total_price:  String(Math.round(parseFloat(r.rate) * 100)),
+      currency:     'GBP',
+    };
+
+    // Pin to exact selected date so Shopify shows one date, not a range
+    if (selDate) {
+      rate.min_delivery_date = selDate + 'T12:00:00+00:00';
+      rate.max_delivery_date = selDate + 'T12:00:00+00:00';
     }
+
+    results.push(rate);
   }
   return results;
 }
