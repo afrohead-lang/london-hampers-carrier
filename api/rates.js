@@ -99,14 +99,6 @@ const SERVICE_CODES = {
   'Sunday UK Delivery':           'sunday',
 };
 
-const DISPLAY_NAMES = {
-  'Next Day Delivery':     'Next Day UK Delivery',
-  'Same Day Delivery':     'Same Day London Delivery',
-  'Dated Delivery':        'Dated UK Delivery',
-  'Saturday Delivery':     'Saturday UK Delivery',
-  'Sunday Delivery':       'Sunday UK Delivery',
-};
-
 function buildRates(allRates, postcode) {
   const results = [];
   for (const r of allRates) {
