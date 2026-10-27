@@ -83,12 +83,20 @@ function inRange(postcode, zipFrom, zipTo) {
 }
 
 // ── Build Shopify rate objects for matching entries ──────────────────────────
+const DISPLAY_NAMES = {
+  'Next Day Delivery':    'Next Working Day UK Delivery',
+  'Same Day Delivery':    'Same Day London Delivery',
+  'Dated Delivery':       'Dated UK Delivery',
+  'Saturday Delivery':    'Saturday UK Delivery',
+  'Sunday Delivery':      'Sunday UK Delivery',
+};
+
 const SERVICE_CODES = {
-  'Same Day London Delivery': 'same_day_london',
-  'Dated Delivery':           'dated_delivery',
-  'Next Day Delivery':        'next_day',
-  'Saturday Delivery':        'saturday',
-  'Sunday Delivery':          'sunday',
+  'Next Working Day UK Delivery': 'next_day',
+  'Same Day London Delivery':     'same_day_london',
+  'Dated UK Delivery':            'dated_delivery',
+  'Saturday UK Delivery':         'saturday',
+  'Sunday UK Delivery':           'sunday',
 };
 
 const DISPLAY_NAMES = {
@@ -103,9 +111,10 @@ function buildRates(allRates, postcode) {
   const results = [];
   for (const r of allRates) {
     if (inRange(postcode, r.zip_from, r.zip_to)) {
+      const displayName = DISPLAY_NAMES[r.delivery_type] || r.delivery_type;
       results.push({
-        service_name: DISPLAY_NAMES[r.delivery_type] || r.delivery_type,
-        service_code: SERVICE_CODES[r.delivery_type] || 'custom',
+        service_name: displayName,
+        service_code: SERVICE_CODES[displayName] || 'custom',
         total_price:  String(Math.round(parseFloat(r.rate) * 100)), // pence
         currency:     'GBP',
       });
